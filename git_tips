@@ -1,0 +1,23 @@
+1. how to create a new branch
+	a) git checkout -b local-branch-name repo-name/remote-branch-name
+	b) git checkout --track local-branch-name repo-name/remote-branch-name
+don't use this method:
+	c) git branch local-branch-name
+	   git chechout local-branch-name
+because, a),b) will sync the local branch with remote branch in repo
+automatically, but c) will not make local branch sync with remote branch.
+
+2. how to push, pull code
+	a) git push [repo-name] [local-branch-name]:[remote-branch-name]
+if you ignore remote-branch-name( and ":"), remote branch name will be the
+same as local branch name;
+if ignore both local and remote branch name, all local branches will be
+push to repo.
+	b) git pull [repo-name] [remote-branch-name]:[local-branch-name]
+if you ignore local-branch-name( and ":"), then local-branch-name will be
+the same as remote branch name;
+if ignore both local and remote branch name, all remote branches will be
+pull from repo.
+git pull is equivalent to:
+	git fetch repo-name remote-branch-name
+	git merge repo-name/remote-branch-name
