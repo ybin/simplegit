@@ -1,23 +1,48 @@
 1. how to create a new branch
-	a) git checkout -b local-branch-name repo-name/remote-branch-name
-	b) git checkout --track local-branch-name repo-name/remote-branch-name
-don't use this method:
+	a) git checkout --track local-branch-name repo-name/remote-branch-name
+don't use these methods:
+	b) git checkout -b local-branch-name repo-name/remote-branch-name
 	c) git branch local-branch-name
 	   git chechout local-branch-name
-because, a),b) will sync the local branch with remote branch in repo
-automatically, but c) will not make local branch sync with remote branch.
+because, a) will sync the local branch with remote branch in repo
+automatically, but b), c) will not make local branch sync with remote 
+branch.
 
 2. how to push, pull code
 	a) git push [repo-name] [local-branch-name]:[remote-branch-name]
 if you ignore remote-branch-name( and ":"), remote branch name will be the
 same as local branch name;
-if ignore both local and remote branch name, all local branches will be
-push to repo.
+if ignore both local and remote branch name, all local branches which
+track a remote branch will be pushed.
 	b) git pull [repo-name] [remote-branch-name]:[local-branch-name]
-if you ignore local-branch-name( and ":"), then local-branch-name will be
-the same as remote branch name;
-if ignore both local and remote branch name, all remote branches will be
-pull from repo.
+if you ignore local-branch-name( and ":"), then the current local branch
+will be update with the remote branch;
+if ignore both local and remote branch name, nothing will be done.
 git pull is equivalent to:
 	git fetch repo-name remote-branch-name
 	git merge repo-name/remote-branch-name
+
+3. git会自动替用户做很多事情
+	a) git push origin local_branch[:remote_branch]
+	这里remote_branch被省略了，那么git会认为remote_branch就是local_branch
+	跟踪的那一个远程分支，如果没有这样的分支，git就创建一个同名的远程分支。
+	b) git pull origin remote_branch[:local_branch]
+	这里省略了本地分支的名字，git会认为本地分支即为当前所在的分支，并自动
+	将远程分支的内容merge进当前分支。
+	c) git pull, git push这两个不带任何参数的命令会产生什么动作呢？
+	假如有如下分支对于关系：
+		local-A <---> remote-A  -->  tracked
+		local-B <---> remote-B  -->  untracked
+	现在git checkout local-B, 
+		假如local-A中有待push到remote-A的内容，那么此时在local-B中执行
+	git push将会把local-A中的待push内容push到remote-A中；
+		假如remote-A中有待pull到local-A的内容，那么此时在local-B中直行
+	git pull将*不会*把remote-A中待pull到local-A中的内容pull到local-A中，
+	也就是说git自动push却不会自动pull.
+	想象一下，local-A, local-B中都有人在写代码，如果local-B中的人会随意将
+	远程的代码pull到local-A中，那么local-A中的人还有法工作吗？
+4. 如何操作repo
+	git remote show [repo-name]
+		显示repo-name的相关信息，包括哪些分支track了哪些分支，省掉repo-name
+		将会显示所有repo的名字。
+
